@@ -1,13 +1,13 @@
 const TEAM_INFO = [
-  { name: "고양 소노", short: "소노", color: "#223E63", secondary: "#72A3CD" },
+  { name: "고양 소노", short: "소노", color: "#73a3cd", secondary: "#233e63" },
   { name: "대구 한국가스공사", short: "가스공사", color: "#374EA2", secondary: "#DCDDDE" },
-  { name: "부산 KCC", short: "KCC", color: "#054196", secondary: "#F09814" },
-  { name: "서울 삼성", short: "삼성", color: "#000000", secondary: "#FAC10B" },
-  { name: "서울 SK", short: "SK", color: "#E1002B", secondary: "#F5A200" },
-  { name: "수원 KT", short: "KT", color: "#D92728", secondary: "#241A16" },
-  { name: "안양 정관장", short: "정관장", color: "#CF1F25", secondary: "#000000" },
-  { name: "울산 현대모비스", short: "현대모비스", color: "#1A3065", secondary: "#DF2528" },
-  { name: "원주 DB", short: "DB", color: "#007F41", secondary: "#001B54" },
+  { name: "부산 KCC", short: "KCC", color: "#044196", secondary: "#0283c7" },
+  { name: "서울 삼성", short: "삼성", color: "#0141a0", secondary: "#fac10b" },
+  { name: "서울 SK", short: "SK", color: "#e1012a", secondary: "#eb570e" },
+  { name: "수원 KT", short: "KT", color: "#000000", secondary: "#d82729" },
+  { name: "안양 정관장", short: "정관장", color: "#c71f24", secondary: "#000000" },
+  { name: "울산 현대모비스", short: "현대모비스", color: "#df2528", secondary: "#1a3064" },
+  { name: "원주 DB", short: "DB", color: "#005c28", secondary: "#008932" },
   { name: "창원 LG", short: "LG", color: "#470000", secondary: "#FFD900" },
 ];
 const teamMap = new Map(TEAM_INFO.map((team) => [team.name, team]));
@@ -100,7 +100,7 @@ function navigateMonth(delta) {
 }
 
 function renderTeamOptions() {
-  $("#teamOptions").innerHTML = TEAM_INFO.map((team) => `<button class="team-option" type="button" data-team="${esc(team.name)}" aria-pressed="${state.teams.has(team.name)}" title="${esc(team.name)}" style="--team-color:${team.color};--team-tint:${team.color}12"><img src="${logo(team.name)}" alt="" /><span>${esc(team.name)}</span></button>`).join("");
+  $("#teamOptions").innerHTML = TEAM_INFO.map((team) => `<button class="team-option" type="button" data-team="${esc(team.name)}" aria-pressed="${state.teams.has(team.name)}" title="${esc(team.name)}" style="--team-color:${team.color};--team-tint:${team.color}28"><img src="${logo(team.name)}" alt="" /><span>${esc(team.name)}</span></button>`).join("");
   $("#teamCount").textContent = state.teams.size ? `${state.teams.size}팀 선택` : "전체";
 }
 function renderVenueOptions() {
@@ -135,7 +135,7 @@ function pill(game) {
   const match = result?.status === "ended" || result?.status === "live"
     ? `${short(game.home)} <span class="pill-score">${result.home}-${result.away}</span> ${short(game.away)}`
     : game.date < today ? `${short(game.home)} <span class="pill-versus">결과 확인</span> ${short(game.away)}` : `${short(game.home)} <span class="pill-versus">vs</span> ${short(game.away)}`;
-  return `<button class="game-pill ${result?.status || ""}" type="button" data-game="${esc(game.id)}" style="--game-color:${color};--game-tint:${color}18" title="${esc(game.time + " " + game.home + " " + resultLabel(game) + " " + game.away)}"><span class="pill-time">${esc(game.time)}</span> ${match}</button>`;
+  return `<button class="game-pill ${result?.status || ""}" type="button" data-game="${esc(game.id)}" style="--game-color:${color};--game-tint:${color}30" title="${esc(game.time + " " + game.home + " " + resultLabel(game) + " " + game.away)}"><span class="pill-time">${esc(game.time)}</span> ${match}</button>`;
 }
 function renderCalendar(monthGames) {
   const [year, month] = state.month.split("-").map(Number);
@@ -180,7 +180,7 @@ function gameCard(game) {
   const homeLost = ended && result.home < result.away;
   const awayLost = ended && result.away < result.home;
   const color = colorFor(game);
-  return `<button class="result-card" type="button" data-game="${esc(game.id)}" style="--game-color:${color};--game-tint:${color}18"><span class="result-card-meta"><span class="game-type">정규시즌</span><span>${esc(game.time)}</span><span>${esc(game.venue)}</span><strong class="status-tag ${ended ? "finished" : live ? "live" : ""}">${gameStatus(game)}</strong></span><span class="result-card-main"><span class="result-team home ${homeLost ? "lost" : ""}"><span>${esc(game.home)}</span><img src="${logo(game.home)}" alt="" /></span><span class="result-score ${ended ? "final" : live ? "in-progress" : ""}">${resultLabel(game)}</span><span class="result-team away ${awayLost ? "lost" : ""}"><img src="${logo(game.away)}" alt="" /><span>${esc(game.away)}</span></span><span class="card-chevron" aria-hidden="true">›</span></span></button>`;
+  return `<button class="result-card" type="button" data-game="${esc(game.id)}" style="--game-color:${color};--game-tint:${color}30"><span class="result-card-meta"><span class="game-type">정규시즌</span><span>${esc(game.time)}</span><span>${esc(game.venue)}</span><strong class="status-tag ${ended ? "finished" : live ? "live" : ""}">${gameStatus(game)}</strong></span><span class="result-card-main"><span class="result-team home ${homeLost ? "lost" : ""}"><span>${esc(game.home)}</span><img src="${logo(game.home)}" alt="" /></span><span class="result-score ${ended ? "final" : live ? "in-progress" : ""}">${resultLabel(game)}</span><span class="result-team away ${awayLost ? "lost" : ""}"><img src="${logo(game.away)}" alt="" /><span>${esc(game.away)}</span></span><span class="card-chevron" aria-hidden="true">›</span></span></button>`;
 }
 function renderDay(all) {
   const games = all.filter((game) => game.date === state.date);
