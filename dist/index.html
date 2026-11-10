@@ -6,8 +6,8 @@
     <meta name="theme-color" content="#142433" />
     <meta name="description" content="응원하는 팀과 경기장을 골라 보는 KBL 2026–27 경기 캘린더" />
     <title>코트 캘린더 · KBL 2026–27</title>
-    <link rel="stylesheet" href="./styles.css?v=bc1c68b9f51c" />
-    <script src="./app.js?v=bedcfc0f349d" defer></script>
+    <link rel="stylesheet" href="./styles.css?v=ad5fb1ae09a0" />
+    <script src="./app.js?v=9afdebd5170d" defer></script>
   </head>
   <body>
     <div class="app-shell">
@@ -57,13 +57,13 @@
             <div id="listContainer" class="list-container" hidden></div>
           </section>
 
-          <section class="day-panel" aria-labelledby="dayPanelTitle"><div class="day-panel-header"><div><span class="section-kicker">SELECTED DATE</span><h2 id="dayPanelTitle">선택한 날짜의 경기</h2></div><span id="dayGameCount" class="day-count"></span></div><div id="dayGames" class="day-games"></div></section>
           <div class="data-note"><span aria-hidden="true">ⓘ</span><p>일정은 제공된 2026–27 KBL .ics 파일을 기준으로 합니다. 종료 경기 점수는 KBL 공식 데이터를 불러오며, 관람 전 시간과 장소를 공식 페이지에서 다시 확인하세요.</p></div>
         </div>
       </main>
       <footer class="footer"><span>COURTSIDE © 2026</span><span>농구가 있는 날을 더 쉽게.</span></footer>
     </div>
 
+    <dialog id="dateDialog" class="date-dialog" aria-labelledby="dateDialogTitle"><div class="date-dialog-header"><div><span class="section-kicker">SELECTED DATE</span><h2 id="dateDialogTitle">선택한 날짜의 경기</h2></div><div class="date-dialog-tools"><span id="dayGameCount" class="day-count"></span><button id="closeDate" class="dialog-close" type="button" aria-label="날짜별 경기 닫기">×</button></div></div><div class="date-dialog-body"><div id="dayGames" class="day-games"></div></div></dialog>
     <dialog id="gameDialog" class="game-dialog" aria-labelledby="dialogTitle"><div id="dialogContent"></div></dialog>
     <dialog id="exportDialog" class="export-dialog" aria-labelledby="exportTitle"><div class="export-header"><div><span class="section-kicker">PERSONAL CALENDAR</span><h2 id="exportTitle">원하는 경기만 내보내기</h2><p>기간을 정한 뒤 저장할 경기를 직접 선택하세요.</p></div><button id="closeExport" class="dialog-close" type="button" aria-label="닫기">×</button></div><div class="export-body"><div class="range-fields"><label>시작일<input id="rangeStart" type="date" min="2026-10-03" max="2027-04-11" /></label><label>종료일<input id="rangeEnd" type="date" min="2026-10-03" max="2027-04-11" /></label></div><p id="rangeError" class="range-error" role="alert" hidden></p><div class="export-controls"><span id="candidateCount"></span><div><button id="selectAllGames" type="button">모두 선택</button><button id="clearGames" type="button">선택 해제</button></div></div><div id="exportGames" class="export-games"></div></div><div class="export-footer"><span id="selectionCount">0경기 선택</span><button id="downloadSelected" class="primary-button" type="button" disabled>선택 경기 .ics 저장</button></div></dialog>
   </body>

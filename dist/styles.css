@@ -71,6 +71,7 @@
 .weekday-row{background:#f8f8f8;border-color:#e4e4e4;border-radius:0}
 .calendar-grid{border-color:#e4e4e4;border-radius:0}
 .day-cell{border-color:#e4e4e4;min-height:112px}
+.day-cell:not(.empty){cursor:pointer}
 .day-cell.selected{background:#f6f8fc;box-shadow:inset 0 0 0 2px #0d2768}
 .day-cell.today .day-number{background:#0d2768}
 .game-pill{background:var(--game-tint);border:1px solid var(--game-color);border-left:3px solid var(--game-color);border-radius:3px;color:#172534}
@@ -103,6 +104,15 @@
 .day-panel h2{color:#111}
 .day-games{gap:0}
 .day-panel .result-card:last-child{margin-bottom:0}
+.date-dialog{width:min(760px,calc(100% - 28px));max-height:min(88vh,760px);padding:0;border:0;border-radius:12px;color:#222;box-shadow:0 25px 80px rgba(0,0,0,.28)}
+.date-dialog::backdrop{background:rgba(15,22,35,.62)}
+.date-dialog-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:23px 27px 17px;border-bottom:1px solid #e7e7e7}
+.date-dialog-header h2{font-size:22px;letter-spacing:-.7px;margin:5px 0 0}
+.date-dialog-tools{display:flex;align-items:center;gap:12px}
+.date-dialog-body{max-height:calc(min(88vh,760px) - 93px);overflow-y:auto;padding:0 27px 22px}
+.date-dialog .day-games{margin-top:17px}
+.date-dialog .result-card:last-child{margin-bottom:0}
+@media(max-width:620px){.date-dialog{width:calc(100% - 16px);max-height:calc(100dvh - 16px)}.date-dialog-header{padding:17px 16px 13px}.date-dialog-header h2{font-size:18px}.date-dialog-body{max-height:calc(100dvh - 92px);padding:0 14px 16px}}
 .data-note{color:#777}
 .game-dialog{border-radius:12px}
 .dialog-kicker{color:#b47b27}

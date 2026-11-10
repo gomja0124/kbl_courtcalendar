@@ -154,7 +154,7 @@ function renderCalendar(monthGames) {
     const date = `${state.month}-${String(day).padStart(2, "0")}`;
     const games = byDate.get(date) || [];
     const classes = ["day-cell", slot % 7 === 0 ? "sunday" : "", slot % 7 === 6 ? "saturday" : "", date === today ? "today" : "", date === state.date ? "selected" : ""].filter(Boolean).join(" ");
-    html += `<div class="${classes}"><button class="day-number" type="button" data-date="${date}" aria-label="${readableDate(date)}, ${games.length}경기">${day}</button>${games.slice(0, 2).map(pill).join("")}${games.length > 2 ? `<button class="more-games" data-date="${date}" type="button">+ ${games.length - 2}경기 더보기</button>` : ""}</div>`;
+    html += `<div class="${classes}" data-date="${date}"><button class="day-number" type="button" data-date="${date}" aria-haspopup="dialog" aria-label="${readableDate(date)}, ${games.length}경기">${day}</button>${games.slice(0, 2).map(pill).join("")}${games.length > 2 ? `<button class="more-games" data-date="${date}" type="button" aria-haspopup="dialog">+ ${games.length - 2}경기 더보기</button>` : ""}</div>`;
   }
   $("#calendarGrid").innerHTML = html;
 }
@@ -182,11 +182,18 @@ function gameCard(game) {
   const color = colorFor(game);
   return `<button class="result-card" type="button" data-game="${esc(game.id)}" style="--game-color:${color};--game-tint:${color}30"><span class="result-card-meta"><span class="game-type">정규시즌</span><span>${esc(game.time)}</span><span>${esc(game.venue)}</span><strong class="status-tag ${ended ? "finished" : live ? "live" : ""}">${gameStatus(game)}</strong></span><span class="result-card-main"><span class="result-team home ${homeLost ? "lost" : ""}"><span>${esc(game.home)}</span><img src="${logo(game.home)}" alt="" /></span><span class="result-score ${ended ? "final" : live ? "in-progress" : ""}">${resultLabel(game)}</span><span class="result-team away ${awayLost ? "lost" : ""}"><img src="${logo(game.away)}" alt="" /><span>${esc(game.away)}</span></span><span class="card-chevron" aria-hidden="true">›</span></span></button>`;
 }
-function renderDay(all) {
+function renderDateDialog(all) {
   const games = all.filter((game) => game.date === state.date);
-  $("#dayPanelTitle").textContent = readableDate(state.date);
+  $("#dateDialogTitle").textContent = readableDate(state.date);
   $("#dayGameCount").textContent = `${games.length}경기`;
   $("#dayGames").innerHTML = games.length ? games.map(gameCard).join("") : `<p class="day-empty">이날은 선택한 조건에 맞는 경기가 없어요.</p>`;
+}
+function openDate(date, source) {
+  state.date = date;
+  $("#calendarGrid").querySelector(".day-cell.selected")?.classList.remove("selected");
+  source.closest(".day-cell")?.classList.add("selected");
+  renderDateDialog(filteredEvents());
+  $("#dateDialog").showModal();
 }
 async function loadResultsForMonth(month, force = false) {
   const lastLoad = state.loadedMonths.get(month) || 0;
@@ -229,10 +236,9 @@ function render() {
   $("#listView").setAttribute("aria-pressed", String(state.view === "list"));
   $("#calendarView").hidden = state.view !== "month";
   $("#listContainer").hidden = state.view !== "list";
-  $(".day-panel").hidden = state.view !== "month";
   renderCalendar(monthGames);
   renderList(monthGames);
-  renderDay(all);
+  renderDateDialog(all);
   storeFilters();
   void loadResultsForMonth(state.month);
 }
@@ -333,6 +339,7 @@ $("#todayButton").addEventListener("click", () => { state.month = today.slice(0,
 $("#monthView").addEventListener("click", () => { state.view = "month"; render(); });
 $("#listView").addEventListener("click", () => { state.view = "list"; render(); });
 $("#openExport").addEventListener("click", openExport);
+$("#closeDate").addEventListener("click", () => $("#dateDialog").close());
 $("#closeExport").addEventListener("click", () => $("#exportDialog").close());
 $("#rangeStart").addEventListener("change", (event) => { exportState.start = event.target.value; renderExport(); });
 $("#rangeEnd").addEventListener("change", (event) => { exportState.end = event.target.value; renderExport(); });
@@ -354,10 +361,11 @@ document.addEventListener("click", (event) => {
   const game = event.target.closest("[data-game]");
   if (game) { openGame(game.dataset.game); return; }
   const date = event.target.closest("[data-date]");
-  if (date) { state.date = date.dataset.date; render(); return; }
+  if (date) { openDate(date.dataset.date, date); return; }
   if (event.target.closest("[data-close]")) $("#gameDialog").close();
 });
 $("#gameDialog").addEventListener("click", (event) => { if (event.target === $("#gameDialog")) $("#gameDialog").close(); });
+$("#dateDialog").addEventListener("click", (event) => { if (event.target === $("#dateDialog")) $("#dateDialog").close(); });
 $("#exportDialog").addEventListener("click", (event) => { if (event.target === $("#exportDialog")) $("#exportDialog").close(); });
 $("#homeColorGuide").innerHTML = TEAM_INFO.map((team) => `<span class="home-color-guide-item" title="${esc(team.name)}"><i aria-hidden="true" style="background:${team.color}"></i>${esc(team.short)}</span>`).join("");
 
