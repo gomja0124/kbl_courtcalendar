@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import json
+import hashlib
+import re
 from pathlib import Path
 
 
@@ -15,6 +17,19 @@ TYPES = {
     ".json": "application/json; charset=utf-8",
     ".svg": "image/svg+xml",
 }
+
+# A new URL prevents browsers from keeping older CSS and JavaScript after a publish.
+index_path = DIST / "index.html"
+index_html = index_path.read_text(encoding="utf-8")
+for filename in ("styles.css", "app.js"):
+    digest = hashlib.sha256((DIST / filename).read_bytes()).hexdigest()[:12]
+    index_html = re.sub(
+        rf"\./{re.escape(filename)}(?:\?v=[0-9a-f]{{12}})?",
+        f"./{filename}?v={digest}",
+        index_html,
+    )
+if index_html != index_path.read_text(encoding="utf-8"):
+    index_path.write_text(index_html, encoding="utf-8")
 
 assets = {}
 for path in DIST.rglob("*"):
